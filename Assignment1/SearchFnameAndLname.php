@@ -1,0 +1,128 @@
+
+
+<?php
+require("ConnectToDatabase.php");
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees Record</title>
+    <style>
+        table{
+            border-collapse: separate;
+            border: 1px dotted red;
+        }
+        th{
+            border: 2px dotted red;
+            background: yellow;
+        } tr, td{
+              border: 1px dotted red;
+          }
+
+    </style>
+
+</head>
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th>Emp. Number </th>
+        <th id="date"> Birth Date</th>
+        <th> First Name</th>
+        <th> Last Name</th>
+        <th id="date"> Gender</th>
+        <th> Hire Date</th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <form id="serach" method="post" action="SearchFnameAndLname.php">
+        <label>Search: </label>
+        <input type="text" name="search" value="<?php echo $_POST['search']?>">
+        <input type="submit" name="submit" value="Submit Query">
+    </form></br>
+
+    <?php
+    $search = (string) $_POST['search'];
+    $connect = connectToDatabase();
+    $perPage=25;
+    $startPage = 0;
+    if(isset($_GET['id'])){
+        $startPage = $_GET['id'];
+    }else{
+        $startPage = 0;
+    }
+    $myQuery = "SELECT * FROM employees LIMIT $startPage,$perPage;";
+    $myQuery2 = "SELECT * FROM employees WHERE first_name LIKE '%$search%' OR last_name LIKE '%$search%' LIMIT $startPage,$perPage;";
+
+
+    if ($search == null)
+    {
+        $queryResult = mysqli_query($connect,$myQuery);
+    }
+    else
+    {
+        $queryResult = mysqli_query($connect,$myQuery2);
+    }
+
+    $TotalRecords = mysqli_num_rows($queryResult);
+
+    if (!$queryResult){
+
+        echo die("Could not retrieve data from the Database".mysqli_error());
+    }
+
+    while ($row = mysqli_fetch_assoc($queryResult)): ?>
+        <tr>
+            <td>
+                <?php echo $row['emp_no'];?>
+            </td>
+            <td>
+                <?php echo $row['birth_date'];?>
+            </td>
+            <td>
+                <?php echo $row['first_name'];?>
+            </td>
+            <td>
+                <?php echo $row['last_name'];?>
+            </td>
+            <td>
+                <?php echo $row['gender'];?>
+            </td>
+            <td>
+                <?php echo $row['hire_date'];?>
+            </td>
+
+
+        </tr>
+    <?php endwhile;
+    if ($startPage ==0){
+        echo " &laquo; Previous";
+
+    }
+    else{
+        //echo    '<a href="PagingForempRecords.php?id='." ".($startPage -1).'">'.Previous &laquo; '</a>';
+        echo '<a href="SearchFnameAndLname.php?id=' . ($startPage - $perPage).  '  ">&laquo;Previous </a>';
+
+    }
+    echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    if ($startPage == $TotalRecords-1){
+        echo "Next &laquo;";
+    }
+    else{
+        //echo    '<a href="PagingForempRecords.php?id='." ".($startPage -1).'">'.Previous &laquo; '</a>';
+        echo '<a href="SearchFnameAndLname.php?id=' . ($startPage + $perPage).  '">Next &raquo;</a>';
+
+    }
+
+    $connect = disConnectFromDatabase();?>
+
+    </tbody>
+</table>
+</body>
+</html>
