@@ -10,36 +10,43 @@ class Triangle extends Shapes
     private $base;
     private $height;
 
-    public function __construct($sName, $tBase, $tHeight)
+    public function __construct($sName,$gs, $Base, $Height)
     {
-        parent::__construct($sName);
-        $this->base = $tBase;
-        $this->height = $tHeight;
+        parent::__construct($sName,$gs);
+        $this->base = $Base;
+        $this->height = $Height;
     }
 
     public function calculateArea()
     {
 
-        $b = $this->getBase();
-        $h = $this->getHeight();
+        $base = $this->getBase();
+        $height = $this->getHeight();
 
-        $totArea = ($b * $h)/2;
-        return $totArea;
+        $Area = ($base * $height)/2;
+        return $Area;
     }
 
-    public function growSize(){
+    public function growShape(){
         $this->setArea($this->calculateArea());
-        $growSize = $this->getGrowSize();
-        $newTot = $this->getArea()+(($growSize/100)*$this->getArea());
-        $newTot = round($newTot,5);
-        return  $newTot;
+        $newArea = $this->getArea()+(($this->gs/100)*$this->getArea());
+
+        //calculation for new HEIGHT//
+        $newHeight = ($newArea*2)/$this->base;
+        $this->setHeight(round($newHeight,3));
+
+        return round($newArea,3);
     }
 
-    public function shrinkSize(){
+    public function shrinkShape(){
         $this->setArea($this->calculateArea());
-        $shrinkSize = $this->getShrinkSize();
-        $newTot = $this->getArea()-(($shrinkSize/100)*$this->getArea());
-        return  $newTot;
+        $newArea= $this->getArea()-(($this->gs/100)*$this->getArea());
+
+        //calculation for new HEIGHT //
+        $newHeight = ($newArea*2)/$this->base;
+        $this->setHeight(round($newHeight,3));
+
+        return round($newArea,3);
     }
 
 
@@ -56,5 +63,9 @@ class Triangle extends Shapes
     public function getHeight()
     {
         return $this->height;
+    }
+    public function setHeight($height)
+    {
+        $this->height = $height;
     }
 }

@@ -10,15 +10,16 @@ abstract class Shapes
 {
     protected $name;
     protected $area;
-    protected $growSize;
-    protected $shrinkSize;
+    protected $gs;
+
 
     // Abstract methods
     abstract public function calculateArea();
 
-    public function __construct($sName)
+    public function __construct($sName,$gs)
     {
         $this->name= $sName;
+        $this->gs = $gs;
 
 
     }

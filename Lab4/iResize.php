@@ -7,7 +7,7 @@
 
 interface iResize
 {
-    public function growSize();
-    public function shrinkSize();
+    public function growShape();
+    public function shrinkShape();
 }
 

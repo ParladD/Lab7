@@ -10,32 +10,39 @@ class Circle extends Shapes
     private $radius;
 
 
-    public function __construct($sName,$cRadius)
+    public function __construct($sName,$gs,$radius)
     {
-        parent::__construct($sName);
-        $this->radius = $cRadius;
+        parent::__construct($sName,$gs);
+
+        $this->radius = $radius;
     }
 
     public function calculateArea()
     {
-        $totArea = M_PI * (pow($this->getRadius(),2));
-        return round($totArea,5);
+        $Area = M_PI * (pow($this->radius,2));
+        return round($Area,3);
     }
 
-    public function growSize(){
+    public function growShape(){
         $this->setArea($this->calculateArea());
-        $growSize = $this->getGrowSize();
-        $newTot = $this->getArea()+(($growSize/100)*$this->getArea());
-        $newTot = round($newTot,5);
+        $newArea = $this->getArea()+(($this->gs/100)*$this->getArea());
 
-        return  $newTot;
+        //calculation for new radius //
+        $newRadius = sqrt($newArea/M_PI);
+        $this->setRadius(round($newRadius,3));
+
+        return round($newArea,3);
     }
 
-    public function shrinkSize(){
+    public function shrinkShape(){
         $this->setArea($this->calculateArea());
-        $shrinkSize = $this->getShrinkSize();
-        $newTot = $this->getArea()-(($shrinkSize/100)*$this->getArea());
-        return  $newTot;
+        $newArea= $this->getArea()-(($this->gs/100)*$this->getArea());
+
+        //calculation for new radius //
+        $newRadius = sqrt($newArea/M_PI);
+        $this->setRadius(round($newRadius,3));
+
+        return round($newArea,3);
     }
 
 
@@ -44,5 +51,13 @@ class Circle extends Shapes
     {
         return $this->radius;
     }
+
+    public function setRadius($radius)
+    {
+      $this->radius = $radius;
+    }
+
+
+
 
 }
